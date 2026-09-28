@@ -1,0 +1,958 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 强制显示滚动条以确保所有页面布局一致 */
+html {
+  overflow-y: scroll;
+}
+
+:root {
+  /* NOFX cream-paper + vermilion terminal design system */
+  --nofx-gold: #E0483B;
+  --nofx-bg: #F1ECE2;
+  --nofx-accent: #E0483B;
+  --nofx-glass: rgba(247, 244, 236, 0.85);
+  --nofx-border: rgba(26, 24, 19, 0.14);
+
+  /* Soft accents (no neon on paper) */
+  --glow-primary: none;
+  --glow-accent: none;
+  --glow-text: none;
+
+  --background: #F1ECE2;
+  --header-bg: rgba(247, 244, 236, 0.85);
+
+  --glass-bg: rgba(247, 244, 236, 0.7);
+  --glass-border: rgba(26, 24, 19, 0.12);
+
+  --panel-bg: #F7F4EC;
+  --panel-bg-hover: #F2EEE4;
+  --panel-border: rgba(26, 24, 19, 0.14);
+  --panel-border-hover: rgba(224, 72, 59, 0.5);
+
+  --foreground: #1A1813;
+  --text-primary: #1A1813;
+  --text-secondary: #6B6557;
+  --text-tertiary: #8A8478;
+  --text-disabled: #B4B2A9;
+
+  /* Trading Colors (forest green / crimson on paper) */
+  --binance-green: #2E8B57;
+  --binance-green-bg: rgba(46, 139, 87, 0.12);
+  --binance-green-border: rgba(46, 139, 87, 0.35);
+  --binance-red: #D6433A;
+  --binance-red-bg: rgba(214, 67, 58, 0.12);
+  --binance-red-border: rgba(214, 67, 58, 0.35);
+  --binance-yellow: #E0483B;
+
+  /* Shadows (subtle on paper) */
+  --shadow-sm: 0 1px 2px rgba(26, 24, 19, 0.08);
+  --shadow-md: 0 2px 8px rgba(26, 24, 19, 0.10);
+  --shadow-lg: 0 6px 24px rgba(26, 24, 19, 0.12);
+  --shadow-glow: none;
+
+  font-family: 'IBM Plex Mono', ui-monospace, Menlo, Monaco, 'Courier New', monospace;
+  line-height: 1.6;
+  font-weight: 400;
+  color-scheme: light;
+  color: var(--foreground);
+  background-color: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* CRT & Tech Effects */
+.crt-overlay {
+  background: none;
+  pointer-events: none;
+}
+
+.tech-border {
+  position: relative;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+}
+
+.tech-border::before,
+.tech-border::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--nofx-gold);
+  transition: all 0.3s ease;
+}
+
+.tech-border::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.tech-border::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+.tech-border:hover::before,
+.tech-border:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.bg-vignette {
+  background: none;
+  pointer-events: none;
+}
+
+.text-glow {
+  text-shadow: none;
+}
+
+.text-glow-accent {
+  text-shadow: none;
+}
+
+.border-glow {
+  box-shadow: none;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background);
+  background-image: none;
+  background-attachment: fixed;
+}
+
+/* Selection — vermilion tint on paper */
+::selection {
+  background: rgba(224, 72, 59, 0.25);
+  color: #1A1813;
+}
+
+#root {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Scrollbar - Binance style */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--panel-border);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nofx-gold);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 16px currentColor;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse-scale {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Glass effect - Binance header style */
+.header-bar {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Sonner (toast) - Binance theme overrides */
+.sonner-toaster {
+  z-index: 9999;
+}
+
+/*
+ * Cream-paper toasts (matches the terminal theme). The --tm-* tokens are scoped
+ * to .nofx-terminal, but sonner renders in a portal at the document root, so we
+ * use the literal cream palette here to stay readable everywhere.
+ */
+.nofx-toast {
+  background: #f1ece2 !important;
+  border: 1px solid #d8d2c4 !important;
+  color: #1a1813 !important;
+  box-shadow: 0 8px 28px rgba(26, 24, 19, 0.18) !important;
+  border-radius: 4px !important;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+}
+
+.nofx-toast .sonner-title {
+  color: #1a1813 !important;
+  font-weight: 700;
+}
+
+.nofx-toast .sonner-description {
+  color: #3a372e !important;
+}
+
+/* Per-type accent: cream background, colored left rail + title. */
+.nofx-toast[data-type='success'] {
+  border-color: #2e8b57 !important;
+  border-left: 3px solid #2e8b57 !important;
+}
+
+.nofx-toast[data-type='success'] .sonner-title {
+  color: #1f6b41 !important;
+}
+
+.nofx-toast[data-type='error'] {
+  border-color: #e0483b !important;
+  border-left: 3px solid #e0483b !important;
+}
+
+.nofx-toast[data-type='error'] .sonner-title {
+  color: #c23529 !important;
+}
+
+.nofx-toast[data-type='warning'],
+.nofx-toast[data-type='info'] {
+  border-color: #c8860b !important;
+  border-left: 3px solid #c8860b !important;
+}
+
+.nofx-toast[data-type='warning'] .sonner-title,
+.nofx-toast[data-type='info'] .sonner-title {
+  color: #9a6800 !important;
+}
+
+.nofx-toast .sonner-close-button {
+  background: #f1ece2 !important;
+  border-color: #d8d2c4 !important;
+  color: #3a372e !important;
+}
+
+.nofx-toast .sonner-close-button:hover {
+  color: #1a1813 !important;
+}
+
+/* Monospace numbers — use for prices, balances, timestamps, code */
+.mono {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.text-profit,
+.text-loss,
+.number-up,
+.number-down {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Button styles - Binance */
+button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+}
+
+button:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+/* Soft Glow for Primary Buttons (Yellow) */
+.btn-primary-glow {
+  box-shadow: 0 0 15px rgba(252, 213, 53, 0.15);
+}
+
+.btn-primary-glow:hover {
+  box-shadow: 0 0 20px rgba(252, 213, 53, 0.3);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button Variants */
+.btn-success {
+  background: rgba(14, 203, 129, 0.1);
+  color: #0ECB81;
+  border: 1px solid rgba(14, 203, 129, 0.3);
+}
+
+.btn-success:hover:not(:disabled) {
+  background: rgba(14, 203, 129, 0.2);
+  box-shadow: 0 0 15px rgba(14, 203, 129, 0.2);
+}
+
+.btn-danger {
+  background: rgba(246, 70, 93, 0.1);
+  color: #F6465D;
+  border: 1px solid rgba(246, 70, 93, 0.3);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: rgba(246, 70, 93, 0.2);
+  box-shadow: 0 0 15px rgba(246, 70, 93, 0.2);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #848E9C;
+  border: 1px solid #2B3139;
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: #F0B90B;
+  color: #F0B90B;
+  background: rgba(240, 185, 11, 0.1);
+}
+
+/* Glass Effect Utility */
+.glass {
+  background: rgba(30, 35, 41, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-panel {
+  background: rgba(30, 35, 41, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nofx-glass {
+  background: rgba(30, 35, 41, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+}
+
+/* Premium Input Styles */
+/* Premium Input Styles */
+input,
+select,
+textarea {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--panel-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--panel-border);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--binance-yellow);
+  box-shadow: 0 0 0 2px rgba(252, 213, 53, 0.15);
+  outline: none;
+  background-color: var(--panel-bg-hover);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Specific Premium Input Utility */
+.premium-input {
+  background: rgba(11, 14, 17, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
+
+  /* Prevent iOS zoom */
+  @media (min-width: 768px) {
+    font-size: 0.875rem;
+  }
+
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.premium-input:hover {
+  border-color: rgba(240, 185, 11, 0.3);
+  background: rgba(11, 14, 17, 0.8);
+}
+
+.premium-input:focus {
+  border-color: var(--binance-yellow);
+  box-shadow: 0 0 0 1px rgba(240, 185, 11, 0.2), 0 0 15px rgba(240, 185, 11, 0.1);
+  background: rgba(11, 14, 17, 0.9);
+}
+
+/* Binance Card - Premium Polish */
+.binance-card {
+  background: rgba(30, 35, 41, 0.4);
+  /* More transparent for glass feel */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  /* More modern radius */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  /* Ensure rounded corners contain content */
+}
+
+.dev-toast-controller {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: min(320px, 85vw);
+  background: rgba(11, 14, 17, 0.9);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 16px;
+  color: var(--text-secondary);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(16px);
+  font-size: 0.85rem;
+  z-index: 9999;
+}
+
+.dev-toast-controller__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.dev-toast-controller__header small {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+.dev-toast-controller__content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dev-toast-controller__label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.dev-toast-controller__label select,
+.dev-toast-controller__label input {
+  width: 100%;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: var(--panel-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.dev-toast-controller__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.dev-toast-controller__actions button {
+  flex: 1;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 8px 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+
+.dev-toast-controller__actions button:first-child {
+  background: rgba(240, 185, 11, 0.15);
+  color: var(--binance-yellow);
+  border: 1px solid rgba(240, 185, 11, 0.4);
+}
+
+.dev-toast-controller__actions button:last-child {
+  background: rgba(132, 142, 156, 0.15);
+  color: var(--text-secondary);
+  border: 1px solid var(--panel-border);
+}
+
+.dev-toast-controller__actions button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.dev-custom-toast {
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f0b90b, #df8c0c);
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+.dev-custom-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.dev-custom-body {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.binance-card:hover {
+  border-color: var(--panel-border-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  background: var(--panel-bg-hover);
+}
+
+.binance-card-no-hover {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Binance gradient backgrounds */
+.binance-gradient {
+  background: linear-gradient(135deg,
+      var(--binance-yellow) 0%,
+      var(--binance-yellow-light) 100%);
+}
+
+.binance-gradient-subtle {
+  background: linear-gradient(135deg,
+      rgba(240, 185, 11, 0.15) 0%,
+      rgba(252, 213, 53, 0.05) 100%);
+  border: 1px solid rgba(240, 185, 11, 0.2);
+}
+
+.binance-glow {
+  box-shadow: 0 0 20px var(--binance-yellow-glow);
+}
+
+/* Status colors */
+.text-profit {
+  color: var(--binance-green);
+  font-weight: 700;
+}
+
+.text-loss {
+  color: var(--binance-red);
+  font-weight: 700;
+}
+
+.bg-profit {
+  background-color: var(--binance-green-bg);
+  color: var(--binance-green);
+  border: 1px solid var(--binance-green-border);
+}
+
+.bg-loss {
+  background-color: var(--binance-red-bg);
+  color: var(--binance-red);
+  border: 1px solid var(--binance-red-border);
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: var(--panel-bg);
+  background-image: linear-gradient(90deg,
+      transparent,
+      rgba(240, 185, 11, 0.05),
+      transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Binance button variants */
+.btn-binance {
+  background: var(--binance-yellow);
+  color: #000;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(240, 185, 11, 0.3);
+}
+
+.btn-binance:hover {
+  background: var(--binance-yellow-light);
+  box-shadow: 0 4px 8px rgba(240, 185, 11, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-binance:active {
+  background: var(--binance-yellow-dark);
+  transform: translateY(0);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--binance-yellow);
+  border: 1.5px solid var(--binance-yellow);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.btn-outline:hover {
+  background: rgba(240, 185, 11, 0.1);
+  border-color: var(--binance-yellow-light);
+}
+
+/* Table styles - Binance */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 0;
+}
+
+td {
+  color: var(--text-primary);
+  padding: 0.75rem 0;
+}
+
+tr {
+  border-bottom: 1px solid var(--panel-border);
+  transition: background 0.2s ease;
+}
+
+tr:last-child {
+  border-bottom: none;
+}
+
+tr:hover {
+  background: rgba(240, 185, 11, 0.03);
+}
+
+/* Badge/Chip styles */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid;
+  transition: all 0.2s ease;
+}
+
+.badge-yellow {
+  background: rgba(240, 185, 11, 0.1);
+  border-color: rgba(240, 185, 11, 0.3);
+  color: var(--binance-yellow);
+}
+
+.badge-green {
+  background: var(--binance-green-bg);
+  border-color: var(--binance-green-border);
+  color: var(--binance-green);
+}
+
+.badge-red {
+  background: var(--binance-red-bg);
+  border-color: var(--binance-red-border);
+  color: var(--binance-red);
+}
+
+/* Number formatting */
+.number-up {
+  color: var(--binance-green);
+}
+
+.number-down {
+  color: var(--binance-red);
+}
+
+/* Scrollbar Hiding for sleek horizontal scrolls */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Linear Fade Mask for Scrollable Areas */
+.mask-linear-fade {
+  mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--panel-border);
+  margin: 1rem 0;
+}
+
+/* Tooltip style */
+.tooltip {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 0.75rem;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  border: 2px solid var(--panel-border);
+  border-top-color: var(--binance-yellow);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 0.6s linear infinite;
+}
+
+/* Stat card enhancements */
+.stat-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+      transparent,
+      var(--binance-yellow),
+      transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.stat-card:hover::before {
+  opacity: 1;
+}
+
+.stat-card:hover {
+  border-color: rgba(240, 185, 11, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Chart container */
+.chart-container {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .binance-card {
+    padding: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+}
+
+/* Holographic Character Effects - Premium Polish */
+@keyframes holo-shift {
+  0% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg) contrast(1);
+  }
+
+  50% {
+    background-position: 100% 50%;
+    filter: hue-rotate(15deg) contrast(1.1);
+  }
+
+  100% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg) contrast(1);
+  }
+}
+
+@keyframes holo-flicker {
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  5% {
+    opacity: 0.8;
+  }
+
+  10% {
+    opacity: 0.7;
+  }
+}
+
+.animate-holo {
+  background-size: 200% 200%;
+  animation: holo-shift 8s ease infinite, holo-flicker 4s infinite;
+}
+
+/* Holographic overlay effect */
+.holo-overlay {
+  /* Complex gradient + noise for texture */
+  background:
+    url('https://grainy-gradients.vercel.app/noise.svg'),
+    conic-gradient(from 0deg at 50% 50%,
+      rgba(240, 185, 11, 0.1) 0deg,
+      rgba(0, 240, 255, 0.1) 120deg,
+      rgba(240, 185, 11, 0.1) 240deg,
+      rgba(240, 185, 11, 0.1) 360deg);
+  mix-blend-mode: overlay;
+  background-blend-mode: overlay, normal;
+}
